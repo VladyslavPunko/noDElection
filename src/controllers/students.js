@@ -75,3 +75,22 @@ export const upsertStudentController = async (req, res, next) => {
     message: "Successfully upserted a student!",
   });
 };
+
+export const patchStudentController = async (req, res, next) => {
+  const { studentId } = req.params;
+
+  const result = await updateStudent(studentId, req.body);
+
+  if (!result) {
+    next(createHttpError(404, "Student not found!"));
+    return;
+  }
+
+  const status = result.isNew ? 201 : 200;
+
+  res.status(status).json({
+    status,
+    data: result.student,
+    message: "Successfully patched a student!",
+  });
+};
