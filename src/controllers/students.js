@@ -5,10 +5,15 @@ import {
   getStudentById,
   updateStudent,
 } from "../services/students.js";
+
 import createHttpError from "http-errors";
 
+import { parsePaginationParams } from "../utils/parsePaginationParams.js";
+
 export const getStudentsController = async (req, res) => {
-  const students = await getAllStudents();
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  const students = await getAllStudents({ page, perPage });
 
   res.json({
     status: 200,
